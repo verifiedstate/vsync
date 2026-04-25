@@ -1,0 +1,32 @@
+{
+  "name": "@verifiedstate/vsync-public",
+  "version": "1.0.0",
+  "description": "Shared memory for Claude Code, Cursor, and any MCP client. Stop your AI from forgetting between sessions and tools.",
+  "homepage": "https://verifiedstate.ai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/verifiedstate/vsync.git"
+  },
+  "bugs": {
+    "url": "https://github.com/verifiedstate/vsync/issues"
+  },
+  "license": "MIT",
+  "author": "VerifiedState",
+  "keywords": [
+    "claude-code",
+    "cursor",
+    "mcp",
+    "model-context-protocol",
+    "ai-memory",
+    "ai-coding",
+    "agents",
+    "claude-md",
+    "agents-md",
+    "cursor-rules",
+    "developer-tools",
+    "llm",
+    "coding-agents",
+    "ai-continuity",
+    "cross-tool-memory"
+  ]
+}

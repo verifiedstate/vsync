@@ -1,0 +1,47 @@
+<!-- This is an EXAMPLE of what your .cursor/rules/verifiedstate.mdc will look like. -->
+<!-- Yours will reflect your actual project state. -->
+
+---
+description: VerifiedState project memory — auto-updated
+alwaysApply: true
+---
+
+# Project Memory (VerifiedState)
+
+Auto-updated 2026-04-25T05:23:09Z. Regenerated every 5 minutes.
+
+## Current state
+
+**Repo:** my-saas-app
+**Goal:** Ship the Stripe checkout flow for the Pro tier
+**Next action:** Wire success webhook to user upgrade endpoint
+**Branch:** feature/stripe-pro-checkout
+
+## Recent decisions
+
+- Use Stripe Checkout (hosted) over Elements for v1
+- Webhook signature verification via `stripe.webhooks.constructEvent` not custom HMAC
+- User upgrade is idempotent (keyed on `subscription_id`) to handle webhook retries
+- Pro tier price ID stored in env var, not database
+
+## Open loops
+
+- Webhook idempotency table needs migration before deploy
+- Need to test 3DS flow on European test card
+- Pricing page copy still says "$19/mo" — update to match Stripe price object
+
+## Constraints
+
+- Must support both monthly and annual billing
+- No PII in webhook logs (regulatory)
+- Failover: poll subscription status hourly if webhooks fail
+
+## What Claude Code did recently
+
+- 2h ago (claude-code): Implemented webhook signature verification, merged to main
+- 4h ago (claude-code): Added subscription idempotency table migration (pending deploy)
+
+## What Cursor did recently
+
+- 1h ago (cursor): Updated pricing page UI components for Pro tier upgrade flow
+- 3h ago (cursor): Refactored auth middleware to support tier-based access checks

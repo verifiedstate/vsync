@@ -1,0 +1,28 @@
+---
+description: VerifiedState project memory and behavioral rules
+alwaysApply: true
+---
+
+# Project Memory (VerifiedState)
+
+This project uses VerifiedState for shared memory across AI tools.
+Current state, decisions, and open loops are in `.cursor/hot-context.md`.
+
+## Rules
+
+- Always check `.cursor/hot-context.md` before making project decisions
+- Query VerifiedState memory tools (`memory_query`, `working_state_get`) when historical context might exist
+- The behavioral guidelines in hot-context.md apply to all work in this repo
+- Treat decisions in hot-context.md as binding unless explicitly reversed
+
+## Available MCP tools
+
+The VerifiedState MCP server is connected via the global Cursor MCP config (`~/.cursor/mcp.json`). Available tools:
+
+- `memory_query` — search past decisions and assertions
+- `working_state_get` — current goal, open loops, next action
+- `working_state_update` — modify current state
+- `session_load` — load context from a previous session
+- (12 additional tools for assertion management, retrieval, and verification)
+
+Use these proactively when the user asks about past work, project state, or recent decisions.
