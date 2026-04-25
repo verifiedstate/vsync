@@ -3,18 +3,18 @@
 **Stop your AI from forgetting between sessions and tools.** Shared, auto-updating memory across Claude Code, Cursor, and any MCP client.
 
 ```bash
-npx @verifiedstate/vsync init
+npx @verifiedstate/sync init
 ```
 
-*One command. 30 seconds. Free forever.*
+*One command. 30 seconds. Free for individuals.*
 
-[![npm version](https://img.shields.io/npm/v/@verifiedstate/vsync.svg)](https://www.npmjs.com/package/@verifiedstate/vsync)
+[![npm version](https://img.shields.io/npm/v/@verifiedstate/sync.svg)](https://www.npmjs.com/package/@verifiedstate/sync)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/verifiedstate/vsync?style=social)](https://github.com/verifiedstate/vsync)
 
 ---
 
-[demo.gif — 20 seconds, split-screen: Claude Code → Cursor sync]
+
 
 ---
 
@@ -47,7 +47,7 @@ vsync writes four files. You can see exactly what they look like in [`/examples`
 - **`AGENTS.md`** — portable agent instructions (cross-tool standard)
 - **`.mcp.json`** — VerifiedState MCP server config
 
-Don't want it anymore? `npx @verifiedstate/vsync eject` removes everything cleanly.
+Don't want it anymore? `npx @verifiedstate/sync eject` removes everything cleanly.
 
 ## How it works
 
@@ -63,7 +63,7 @@ The memory substrate is cryptographically signed — every assertion is Ed25519-
 | Auto-updates with project    |               |              |                  |    ✓      |
 | Cross-tool sync              |               |              |                  |    ✓      |
 | Cryptographic provenance     |               |              |                  |    ✓      |
-| Free forever                 |       ✓       |   limited    |    Claude only   |    ✓      |
+| Free for individuals         |       ✓       |   limited    |    Claude only   |    ✓      |
 
 The Karpathy pack made Claude behave better. vsync makes it remember — across tools.
 
@@ -71,9 +71,13 @@ Works alongside Anthropic's official MCP memory server. We're the cross-tool syn
 
 ## Pricing
 
-**Free forever** for individual developers — unlimited assertions, cross-tool sync, hot-context generation.
+**Free** — $0. For individual developers and personal projects. Everything in vsync with generous limits for solo work.
 
-**Pro (waitlist)** — team workspaces, audit log exports, signed receipt verification dashboard. [Join waitlist](https://verifiedstate.ai)
+**Pro** — $19/month (founder pricing). For serious solo builders. Higher limits, multi-project workspaces, audit exports, commercial use. Pricing locked for 12 months for launch users. [Join waitlist](https://verifiedstate.ai)
+
+**Enterprise** — Contact us. For teams, companies, and organizations. Multi-seat workspaces, SSO, SLA, audit exports, on-prem options, custom limits. Email hello@verifiedstate.ai
+
+Free is for individual developers and personal use. Team, company, agency, or organizational use requires Enterprise — even when each developer installs separately.
 
 ## Security
 
@@ -84,14 +88,14 @@ vsync runs locally and only sends signed assertions to your VerifiedState accoun
 - Website: [verifiedstate.ai](https://verifiedstate.ai)
 - MCP server: [mcp.verifiedstate.ai](https://mcp.verifiedstate.ai)
 - Dashboard: [verifiedstate.ai/dashboard](https://verifiedstate.ai/dashboard)
-- npm: [@verifiedstate/vsync](https://www.npmjs.com/package/@verifiedstate/vsync)
+- npm: [@verifiedstate/sync](https://www.npmjs.com/package/@verifiedstate/sync)
 - Documentation: [verifiedstate.ai/docs](https://verifiedstate.ai/docs)
 
 ## License
 
 MIT for this repo (CLI wrapper, templates, examples).
 
-The hosted VerifiedState memory substrate is operated by VerifiedState. Free tier is fully featured for individual developers.
+The hosted VerifiedState memory substrate is operated by VerifiedState. Free tier available for individual developers.
 
 ---
 
