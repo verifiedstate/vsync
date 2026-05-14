@@ -1,7 +1,7 @@
 {
   "name": "@verifiedstate/vsync-public",
   "version": "1.0.0",
-  "description": "Shared memory for Claude Code, Cursor, and any MCP client. Stop your AI from forgetting between sessions and tools.",
+  "description": "The audit trail for AI coding agents. Automatic session capture, decision extraction, and cryptographic verification across Claude Code, Cursor, Windsurf, and any MCP agent.",
   "homepage": "https://verifiedstate.ai",
   "repository": {
     "type": "git",
@@ -13,20 +13,20 @@
   "license": "MIT",
   "author": "VerifiedState",
   "keywords": [
+    "ai-audit-trail",
+    "ai-coding-agents",
     "claude-code",
     "cursor",
+    "windsurf",
     "mcp",
     "model-context-protocol",
-    "ai-memory",
-    "ai-coding",
-    "agents",
-    "claude-md",
-    "agents-md",
-    "cursor-rules",
+    "ai-observability",
+    "agent-tracing",
+    "code-review",
     "developer-tools",
-    "llm",
-    "coding-agents",
-    "ai-continuity",
-    "cross-tool-memory"
+    "ai-safety",
+    "cryptographic-verification",
+    "decision-trace",
+    "coding-agents"
   ]
 }

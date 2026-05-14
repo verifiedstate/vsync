@@ -1,63 +1,82 @@
-# Security
+# Security — vsync
 
-vsync is designed for local-first operation with explicit, minimal data flowing to VerifiedState's servers. This document explains exactly what happens to your data.
+## What vsync does
 
-## What stays local
+vsync is a **read-only observer**. It watches AI session files on your machine (Cursor, Claude Code, Windsurf) and sends session turn summaries to the VerifiedState API. That's it.
 
-- The `vsync` daemon runs entirely on your machine
-- All file watching, JSONL parsing, and turn extraction happens locally
-- Generated context files (`CLAUDE.md`, `.cursor/rules/verifiedstate.mdc`, `AGENTS.md`) are written to your repo, never uploaded
-- Your code, file contents, and git history are never read or transmitted
+## What data vsync collects
 
-## What is sent to VerifiedState servers
+- **Session turn text**: User prompts and AI responses, truncated to 10-20KB per turn
+- **Tool actions**: Names of tools used (Read, Edit, Bash) and file paths (truncated to 120 chars)
+- **Code diffs**: Edit/Write inputs — old_string/new_string pairs, truncated to 2-3KB each
+- **Git metadata**: Commit hash, message, branch, files changed, author
+- **Session metadata**: Session ID, project name, repo name, model, tool, timestamps
 
-When the daemon captures a turn from Claude Code or Cursor, it sends to `api.verifiedstate.ai`:
+## What vsync does NOT collect
 
-- The user's prompt text (what you typed to the AI)
-- The AI's response text (what the AI said back)
-- A timestamp
-- The repo name (basename only, not the full path)
-- An anonymous session identifier
+- **Environment variables** — never reads `process.env` beyond `NO_COLOR` and `HOME`
+- **API keys / secrets** — scrubbed before any payload leaves your machine
+- **.env files** — hard-rejected; never read, period
+- **Private keys** — PEM/SSH patterns scrubbed before sending
+- **File contents outside session files** — only reads declared paths
+- **Anything from disallowed projects** — project allow-list controls scope
 
-That data is stored as a cryptographically signed assertion in your VerifiedState namespace, accessible only with your API key.
+## Data flow
 
-## What is NOT sent
+```
+Your machine                          VerifiedState
++------------------+                 +----------------------+
+| AI session files  |--read-only-->  |                      |
+| (Cursor, Claude   |                | api.verifiedstate.ai |
+|  Code, Windsurf)  |  --scrub-->    |     /ingest          |
+|                   |  --send-->     |                      |
++------------------+                 +----------------------+
+        |
+        v
+ ~/.vsync/audit.jsonl  (local log of everything sent)
+```
 
-- File contents from your repo
-- Git history or diffs
-- Environment variables or `.env` files
-- Anything outside the AI tool conversation logs
-- File paths beyond the repo root basename
+No analytics. No telemetry. No third-party services.
 
-## Authentication
+## Network endpoints
 
-vsync stores your API key in `~/.vsync/config.json` with file permissions set to `600` (read/write for your user only). The key is never logged, never sent to third parties, and never written to your repo.
+| Endpoint | Purpose |
+|---|---|
+| `api.verifiedstate.ai/ingest` | Send session turn data |
+| `api.verifiedstate.ai/whoami` | Verify API key on init |
+| `mcp.verifiedstate.ai/mcp` | Working state updates |
+| `context.verifiedstate.ai/context` | Hot context refresh |
 
-## MCP server connection
+All configurable via `~/.vsync/config.json`.
 
-The optional MCP integration with Claude.ai and Claude Desktop uses a bearer token (your API key) sent over HTTPS to `mcp.verifiedstate.ai`. The connection is end-to-end encrypted via TLS. No conversation content is sent through the MCP — the MCP only fetches data you've already stored.
+## File system access
 
-## Removing vsync
+### Reads (read-only)
+- `~/.claude/projects/**/*.jsonl` — Claude Code sessions
+- Cursor/Windsurf `state.vscdb` — SQLite database (read-only copy)
+- `.git/refs/heads/` — commit polling
+- `~/.vsync/config.json` — configuration
 
-Run `npx @verifiedstate/vsync eject` to:
+### Writes (only to `~/.vsync/`)
+- `config.json`, `vsync.pid`, `vsync.log`, `vsync.status.json`
+- `queue/*.json` (offline buffer), `resume.json`, `audit.jsonl`
 
-- Stop the local daemon
-- Remove generated files from your repo
-- Remove the VerifiedState entry from `.mcp.json` (other MCP servers preserved)
-- Remove the Cursor MCP entry (other entries preserved)
-- Optionally delete `~/.vsync/config.json`
-- Optionally request account deletion
+### What vsync NEVER does
+- Run shell commands (except `git log` for commit metadata)
+- Write to user source files
+- Modify git state
+- Read `.env` files, credentials, or private keys
+- Access files outside declared paths
 
-Your stored memory remains in your VerifiedState account until you explicitly delete it via the dashboard or via account deletion.
+## Verifying for yourself
+
+```bash
+vsync start --dry-run --foreground   # see payload without sending
+vsync audit                          # view all API calls ever made
+vsync audit verify                   # check hash chain integrity
+npm audit signatures                 # verify npm package provenance
+```
 
 ## Reporting vulnerabilities
 
-Security issues should be reported to security@verifiedstate.ai. Please do not file public GitHub issues for security vulnerabilities. We aim to acknowledge reports within 48 hours and patch critical issues within 7 days.
-
-## MCP-specific notes
-
-VerifiedState's MCP server validates all input parameters against schemas before execution. Tool calls are scoped to the authenticated user's namespace — there is no cross-tenant data access path. We monitor the MCP security ecosystem actively and patch vulnerabilities as they're disclosed.
-
-## Open source
-
-The vsync CLI, templates, and installer logic are MIT-licensed and visible in this repository. You can audit exactly what runs on your machine. The hosted VerifiedState substrate (storage backend, signing infrastructure, retrieval workers) is operated by VerifiedState.
+Email [security@verifiedstate.ai](mailto:security@verifiedstate.ai). We respond within 48 hours.
